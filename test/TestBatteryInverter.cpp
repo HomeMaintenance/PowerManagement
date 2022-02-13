@@ -15,13 +15,13 @@ float TestBatteryInverter::present_charge() const {
 }
 
 float TestBatteryInverter::charged_energy() const {
-    return total_capacity() * soc();
+    return max_capacity() * soc();
 }
 
-float TestBatteryInverter::total_capacity() const {
+float TestBatteryInverter::max_capacity() const {
     return 9500;
 }
 
 float TestBatteryInverter::missing_charge() const {
-    return total_capacity() - charged_energy();
+    return max_capacity() - charged_energy();
 }

@@ -9,6 +9,6 @@ public:
     float present_charge() const override;
 
     float charged_energy() const override;
-    float total_capacity() const override;
+    float max_capacity() const override;
     float missing_charge() const override;
 };

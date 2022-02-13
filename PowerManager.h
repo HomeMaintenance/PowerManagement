@@ -6,6 +6,10 @@
 #include "PowerSink.h"
 #include "BatteryManager.h"
 
+/**
+ * @brief
+ *
+ */
 class PowerManager{
 public:
     PowerManager(

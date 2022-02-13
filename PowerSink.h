@@ -2,25 +2,58 @@
 #include <string>
 #include "PowerRange.h"
 
+/**
+ * @brief Used to add a sink to the #PowerManager
+ *
+ */
 class PowerSink{
 public:
     PowerSink(std::string name);
 
     const std::string name;
 
+    /**
+     * @brief Get the power actually used by the sink
+     *
+     * @return float
+     */
     virtual float using_power() const;
+
+    /**
+     * @brief Get the allowed power of the sink
+     *
+     * @return float
+     */
     float allowed_power() const;
 
+    /**
+     * @brief Allow the sink to use some power
+     *
+     * @param power Amount of power the sink can use
+     * @return true Sink accepts the power
+     * @return false Sink does not accept the power
+     */
     virtual bool allow_power(float power);
 
+    /**
+     * @brief Get the requesting power object
+     *
+     * @return PowerRange
+     */
     PowerRange get_requesting_power() const;
 
 protected:
+    /**
+     * @brief Amount of power the sink is requesting
+     *
+     * This can be used to specify min and max power the sink can use.
+     * By default the sinks requested min is 0 and max is inf
+     *
+     */
     virtual void set_requesting_power(PowerRange& range);
     virtual void set_requesting_power(float min, float max);
 
 private:
-
-    PowerRange requesting_power{PowerRange{0,0}};
+    PowerRange requesting_power{PowerRange{0,std::numeric_limits<float>::max()}};
     float _allowed_power{0.f};
 };

@@ -20,8 +20,8 @@ int main(int argc, char* argv[])
     std::cout << "present_charge: " << present_charge << std::endl;
     float charged_energy = myManager.charged_energy();
     std::cout << "charged_energy: " << charged_energy << std::endl;
-    float total_capacity = myManager.total_capacity();
-    std::cout << "total_capacity: " << total_capacity << std::endl;
+    float max_capacity = myManager.max_capacity();
+    std::cout << "max_capacity: " << max_capacity << std::endl;
     float missing_charge = myManager.missing_charge();
     std::cout << "missing_charge: " << missing_charge << std::endl;
 

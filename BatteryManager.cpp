@@ -45,8 +45,8 @@ float BatteryManager::charged_energy() const {
     return BatteryManager::inverters_read_property(&BatteryInverter::charged_energy);
 }
 
-float BatteryManager::total_capacity() const {
-    return BatteryManager::inverters_read_property(&BatteryInverter::total_capacity);
+float BatteryManager::max_capacity() const {
+    return BatteryManager::inverters_read_property(&BatteryInverter::max_capacity);
 }
 
 float BatteryManager::missing_charge() const {
