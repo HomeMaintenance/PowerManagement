@@ -25,17 +25,19 @@ add_library(
 target_include_directories(PowerManagement PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions(PowerManagement PRIVATE PWR_MGNT_DEBUG=1)
 
-find_package(Doxygen
-    REQUIRED dot
-    OPTIONAL_COMPONENTS mscgen dia
-)
-set(DOXYGEN_EXTRACT_PRIVATE TRUE)
-set(DOXYGEN_WARN_IF_UNDOCUMENTED FALSE)
-set(DOXYGEN_OPTIMIZE_OUTPUT_FOR_C TRUE)
-set(DOXYGEN_EXCLUDE_PATTERNS */build/*)
+if(PROJECT_IS_TOP_LEVEL)
+    find_package(Doxygen
+        REQUIRED dot
+        OPTIONAL_COMPONENTS mscgen dia
+    )
+    set(DOXYGEN_EXTRACT_PRIVATE TRUE)
+    set(DOXYGEN_WARN_IF_UNDOCUMENTED FALSE)
+    set(DOXYGEN_OPTIMIZE_OUTPUT_FOR_C TRUE)
+    set(DOXYGEN_EXCLUDE_PATTERNS */build/*)
 
-doxygen_add_docs(doxygen_target
-    ${CMAKE_SOURCE_DIR}
-    ALL
-    COMMENT "Run doxygen_target"
-)
+    doxygen_add_docs(doxygen_target
+        ${CMAKE_SOURCE_DIR}
+        ALL
+        COMMENT "Run doxygen_target"
+    )
+endif()
