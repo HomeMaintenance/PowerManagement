@@ -58,6 +58,10 @@ public:
      */
     virtual float missing_charge() = 0;
 
+    virtual float max_charge_rate() const = 0;
+
+    virtual float max_discharge_rate() const = 0;
+
 protected:
     /**
      * @brief Set the available power object
