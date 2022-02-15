@@ -26,10 +26,10 @@ float TestBatteryInverter::missing_charge() {
     return max_capacity() - charged_energy();
 }
 
-float max_charge_current(){
+float TestBatteryInverter::max_charge_rate() const{
     return 3000;
 }
 
-float max_discharge_current(){
+float TestBatteryInverter::max_discharge_rate() const{
     return 4500;
 }
