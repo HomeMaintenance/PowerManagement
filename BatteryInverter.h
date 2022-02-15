@@ -17,46 +17,46 @@ public:
      *
      * @return float
      */
-    float get_available_power() const;
+    float get_available_power();
 
     /**
      * @brief Get soc of the battery [%]
      *
      * @return float
      */
-    virtual float soc() const = 0;
+    virtual float soc() = 0;
     /**
      * @brief Get the discharge power [W]
      *
      * @return float
      */
-    virtual float present_discharge() const = 0;
+    virtual float present_discharge() = 0;
     /**
      * @brief Get the charge power [W]
      *
      * @return float
      */
-    virtual float present_charge() const = 0;
+    virtual float present_charge() = 0;
 
     /**
      * @brief Get charged energy [Wh]
      *
      * @return float
      */
-    virtual float charged_energy() const = 0;
+    virtual float charged_energy() = 0;
 
     /**
      * @brief Get maximal capacity of the battery [Wh]
      *
      * @return float
      */
-    virtual float max_capacity() const = 0;
+    virtual float max_capacity() = 0;
     /**
      * @brief Get missing charge. Max - charged_energy [Wh]
      *
      * @return float
      */
-    virtual float missing_charge() const = 0;
+    virtual float missing_charge() = 0;
 
 protected:
     /**

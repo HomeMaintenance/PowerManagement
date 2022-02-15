@@ -2,9 +2,7 @@
 
 PowerSink::PowerSink(std::string _name): name(_name) {}
 
-float PowerSink::using_power() const { return allowed_power(); }
-
-float PowerSink::allowed_power() const { return _allowed_power; }
+float PowerSink::allowed_power() { return _allowed_power; }
 
 bool PowerSink::allow_power(float power) {
     _allowed_power = power;

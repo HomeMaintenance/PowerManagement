@@ -4,11 +4,11 @@
 class TestBatteryInverter: public BatteryInverter{
 public:
     TestBatteryInverter();
-    float soc() const override;
-    float present_discharge() const override;
-    float present_charge() const override;
+    float soc() override;
+    float present_discharge() override;
+    float present_charge() override;
 
-    float charged_energy() const override;
-    float max_capacity() const override;
-    float missing_charge() const override;
+    float charged_energy() override;
+    float max_capacity() override;
+    float missing_charge() override;
 };

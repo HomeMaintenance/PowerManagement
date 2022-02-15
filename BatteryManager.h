@@ -30,43 +30,43 @@ public:
      *
      * @return float [W]
      */
-    float available_power() const; // W
+    float available_power(); // W
     /**
      * @brief Read mean soc
      *
      * @return float [%]
      */
-    float soc() const; // %
+    float soc(); // %
     /**
      * @brief Read cumulative present discharge
      *
      * @return float [W]
      */
-    float present_discharge() const; // W
+    float present_discharge(); // W
     /**
      * @brief Read cumulative present charge
      *
      * @return float [W]
      */
-    float present_charge() const; // W
+    float present_charge(); // W
     /**
      * @brief Read cumulative present charged energy
      *
      * @return float [Wh]
      */
-    float charged_energy() const; // Wh
+    float charged_energy(); // Wh
     /**
      * @brief Read cumulative max capacity
      *
      * @return float [Wh]
      */
-    float max_capacity() const; // Wh
+    float max_capacity(); // Wh
     /**
      * @brief Read cumulative missing charge
      *
      * @return float [Wh]
      */
-    float missing_charge() const; // Wh
+    float missing_charge(); // Wh
 protected:
 private:
     /**
@@ -75,6 +75,6 @@ private:
      * @param func Function to call of #BatteryInverter
      * @return float sum of results
      */
-    float inverters_read_property(float (BatteryInverter::*func)() const) const;
+    float inverters_read_property(float (BatteryInverter::*func)());
     std::vector<std::weak_ptr<BatteryInverter>> inverters;
 };

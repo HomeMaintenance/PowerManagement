@@ -6,7 +6,7 @@ void BatteryManager::add_inverter(std::weak_ptr<BatteryInverter> inverter){
     inverters.push_back(inverter);
 }
 
-float BatteryManager::inverters_read_property(float (BatteryInverter::*func)() const) const {
+float BatteryManager::inverters_read_property(float (BatteryInverter::*func)()){
      float result = 0;
     for(const auto& i: inverters){
         if(auto inverter = i.lock()){
@@ -17,11 +17,11 @@ float BatteryManager::inverters_read_property(float (BatteryInverter::*func)() c
     return result;
 }
 
-float BatteryManager::available_power() const {
+float BatteryManager::available_power(){
     return BatteryManager::inverters_read_property(&BatteryInverter::get_available_power);
 }
 
-float BatteryManager::soc() const {
+float BatteryManager::soc(){
     float result = 0;
     float reached_inverters = 0.f;
     for(const auto& i: inverters){
@@ -33,22 +33,22 @@ float BatteryManager::soc() const {
     return result/reached_inverters;
 }
 
-float BatteryManager::present_discharge() const {
+float BatteryManager::present_discharge(){
     return BatteryManager::inverters_read_property(&BatteryInverter::present_discharge);
 }
 
-float BatteryManager::present_charge() const {
+float BatteryManager::present_charge(){
     return BatteryManager::inverters_read_property(&BatteryInverter::present_charge);
 }
 
-float BatteryManager::charged_energy() const {
+float BatteryManager::charged_energy(){
     return BatteryManager::inverters_read_property(&BatteryInverter::charged_energy);
 }
 
-float BatteryManager::max_capacity() const {
+float BatteryManager::max_capacity(){
     return BatteryManager::inverters_read_property(&BatteryInverter::max_capacity);
 }
 
-float BatteryManager::missing_charge() const {
+float BatteryManager::missing_charge(){
     return BatteryManager::inverters_read_property(&BatteryInverter::missing_charge);
 }

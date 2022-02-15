@@ -2,7 +2,7 @@
 
 PowerSource::PowerSource(std::string _name): name(_name) {}
 
-float PowerSource::get_available_power() const{
+float PowerSource::get_available_power(){
     return available_power;
 }
 

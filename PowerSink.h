@@ -17,14 +17,14 @@ public:
      *
      * @return float
      */
-    virtual float using_power() const;
+    virtual float using_power() = 0;
 
     /**
      * @brief Get the allowed power of the sink
      *
      * @return float
      */
-    float allowed_power() const;
+    float allowed_power();
 
     /**
      * @brief Allow the sink to use some power
