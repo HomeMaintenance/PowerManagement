@@ -11,4 +11,7 @@ public:
     float charged_energy() override;
     float max_capacity() override;
     float missing_charge() override;
+
+    float max_charge_current() override;
+    float max_discharge_current() override;
 };
