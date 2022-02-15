@@ -12,6 +12,6 @@ public:
     float max_capacity() override;
     float missing_charge() override;
 
-    float max_charge_current() override;
-    float max_discharge_current() override;
+    float max_charge_rate() const override;
+    float max_discharge_rate() const override;
 };
