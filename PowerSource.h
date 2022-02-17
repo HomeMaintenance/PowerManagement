@@ -15,7 +15,7 @@ public:
      *
      * @return float [W]
      */
-    float get_available_power();
+    virtual float get_available_power() const;
     const std::string name;
 protected:
     /**
