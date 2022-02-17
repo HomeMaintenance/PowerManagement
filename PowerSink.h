@@ -54,6 +54,6 @@ protected:
     virtual void set_requesting_power(float min, float max);
 
 private:
-    PowerRange requesting_power{PowerRange{0,std::numeric_limits<float>::max()}};
+    PowerRange requesting_power{PowerRange{0,(std::numeric_limits<float>::max)()}};
     float _allowed_power{0.f};
 };
