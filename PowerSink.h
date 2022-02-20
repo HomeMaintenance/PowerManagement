@@ -24,7 +24,8 @@ public:
      *
      * @return float
      */
-    float allowed_power();
+    float get_allowed_power() const;
+    void set_allowed_power(float power);
 
     /**
      * @brief Allow the sink to use some power
@@ -33,7 +34,7 @@ public:
      * @return true Sink accepts the power
      * @return false Sink does not accept the power
      */
-    virtual bool allow_power(float power);
+    virtual bool allow_power(float power) = 0;
 
     /**
      * @brief Get the requesting power object
@@ -50,10 +51,12 @@ protected:
      * By default the sinks requested min is 0 and max is inf
      *
      */
+    virtual void set_requesting_power(const PowerRange& range);
     virtual void set_requesting_power(PowerRange& range);
     virtual void set_requesting_power(float min, float max);
 
+
 private:
     PowerRange requesting_power{PowerRange{0,(std::numeric_limits<float>::max)()}};
-    float _allowed_power{0.f};
+    float allowed_power{0.f};
 };
