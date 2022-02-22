@@ -41,25 +41,20 @@ int main(int argc, char* argv[])
     float missing_charge = myManager->missing_charge();
     std::cout << "missing_charge: " << missing_charge << std::endl;
 
+
     std::shared_ptr<TestGrid> test_grid = std::make_shared<TestGrid>();
-
-    std::shared_ptr<httplib::Server> svr = std::make_shared<httplib::Server>();
-
-    svr->Get(
-        "/test",
-        [](const httplib::Request &req, httplib::Response &res){
-            std::string content = "Hello there";
-            res.set_content(content, "text/plain");
-        });
-
-    auto grid_power = []()->float{return 0.24;};
 
     PowerManager powerManager;
     powerManager.set_power_grid(test_grid);
     powerManager.set_battery_manager(myManager);
     powerManager.start_loop();
+
+    std::shared_ptr<httplib::Server> svr = std::make_shared<httplib::Server>();
+
+    // Creates /PowerManager/status url
     powerManager.register_http_server_functions(svr.get());
 
+    // run server in thread
     std::thread server_thread(server_thread_func, svr, "0.0.0.0", 8800);
 
     while(run_servers){

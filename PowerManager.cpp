@@ -112,16 +112,6 @@ void PowerManager::stop_loop(){
 void PowerManager::register_http_server_functions(httplib::Server* svr){
     const std::string prefix = "/PowerManager";
     svr->Get(
-        prefix+"/test",
-        [this]
-        (const httplib::Request &req, httplib::Response &res)
-        {
-            Json::Value jsonData;
-            jsonData["test"] = 2343.232;
-            std::string content = convert_to_string(jsonData);
-            res.set_content(content, "application/json");
-        });
-    svr->Get(
         prefix+"/status",
         [this]
         (const httplib::Request &req, httplib::Response &res)
