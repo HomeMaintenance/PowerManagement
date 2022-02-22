@@ -21,9 +21,19 @@ add_library(
     BatteryInverter.cpp
     PowerManager.h
     PowerManager.cpp
-)
+    PowerGrid.h)
 target_include_directories(PowerManagement PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions(PowerManagement PRIVATE PWR_MGNT_DEBUG=1)
+
+find_path(CPP_HTTPLIB_INCLUDE_DIRS "httplib.h")
+target_include_directories(PowerManagement PUBLIC ${CPP_HTTPLIB_INCLUDE_DIRS})
+
+find_package(jsoncpp CONFIG REQUIRED)
+target_link_libraries(PowerManagement PUBLIC
+    jsoncpp_lib
+    jsoncpp_object
+    JsonCpp::JsonCpp
+)
 
 if(PROJECT_IS_TOP_LEVEL)
     find_package(Doxygen

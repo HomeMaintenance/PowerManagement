@@ -4,6 +4,7 @@ add_executable(PowerManager_test
     TestBatteryInverter.cpp
     TestSink.h
     TestSource.h
+    TestGrid.h
     )
 target_include_directories(PowerManager_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(PowerManager_test PUBLIC PowerManagement)

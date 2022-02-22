@@ -1,12 +1,23 @@
 #include "PowerManager.h"
 
+Json::Value convert_to_json(const std::string str){
+    Json::Value jsonData;
+    Json::Reader jsonReader;
+    jsonReader.parse(str, jsonData);
+    return jsonData;
+}
+
+std::string convert_to_string(const Json::Value& json){
+    return Json::FastWriter().write(json);
+}
+
 PowerManager::PowerManager(
         std::vector<std::weak_ptr<PowerSource>> _sources,
         std::vector<std::weak_ptr<PowerSink>> _sinks
     ):
     sources(_sources), sinks(_sinks)
 {
-
+    dist_buffer.battery_manager = battery_manager;
 }
 
 void PowerManager::add_source(std::weak_ptr<PowerSource> source){
@@ -17,19 +28,32 @@ void PowerManager::add_sink(std::weak_ptr<PowerSink> sink){
     sinks.push_back(sink);
 }
 
+void PowerManager::set_battery_manager(std::weak_ptr<BatteryManager> _battery_manager){
+    battery_manager = _battery_manager;
+    dist_buffer.battery_manager = battery_manager;
+}
+
 std::unordered_map<std::string, float> PowerManager::get_power_distribution() const {
     return {};
 }
 
-void PowerManager::set_power_grid(float (*function)()){
-    // Function to calulate the power from the grid.
-    // Positive if more power is drawn than generated.
-    // If more power is generated set to negative value.
-    power_grid = function;
+void PowerManager::set_power_grid(std::weak_ptr<PowerGrid> grid){
+
+    power_grid = grid;
 }
 
 float PowerManager::distribute(){
-    float power = available_power() - power_grid() - power_buffer;
+    float _power_grid = 0.f;
+    if(auto pwr_grd = power_grid.lock())
+        _power_grid = pwr_grd->get_power();
+    dist_buffer.grid = _power_grid;
+
+    float _available_power = available_power();
+    dist_buffer.available = _available_power;
+
+    float power = _available_power - _power_grid - power_buffer;
+    dist_buffer.power = power;
+    dist_buffer.buffer = power_buffer;
 
     for(const auto& s: sinks){
         auto sink = s.lock();
@@ -51,8 +75,10 @@ float PowerManager::distribute(){
             sink->allow_power(0); // switch off
         }
         power_distribution[sink->name] = sink->using_power();
+        dist_buffer.distribution = power_distribution;
         power -= sink->using_power();
     }
+    dist_buffer.remaining = power;
     return power; // return remaining power
 }
 
@@ -64,4 +90,44 @@ float PowerManager::available_power(){
         }
     }
     return result;
+}
+
+void PowerManager::distribute_loop(){
+    while(distribute_run){
+        distribute();
+        std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(distribute_period*1000)));
+    }
+}
+
+void PowerManager::start_loop(){
+    distribute_run = true;
+    distribute_thread = std::make_unique<std::thread>(&PowerManager::distribute_loop, this);
+}
+
+void PowerManager::stop_loop(){
+    distribute_run = false;
+    distribute_thread->join();
+}
+
+void PowerManager::register_http_server_functions(httplib::Server* svr){
+    const std::string prefix = "/PowerManager";
+    svr->Get(
+        prefix+"/test",
+        [this]
+        (const httplib::Request &req, httplib::Response &res)
+        {
+            Json::Value jsonData;
+            jsonData["test"] = 2343.232;
+            std::string content = convert_to_string(jsonData);
+            res.set_content(content, "application/json");
+        });
+    svr->Get(
+        prefix+"/status",
+        [this]
+        (const httplib::Request &req, httplib::Response &res)
+        {
+            Json::Value jsonData = dist_buffer.toJson();
+            std::string content = convert_to_string(jsonData);
+            res.set_content(content, "application/json");
+        });
 }
