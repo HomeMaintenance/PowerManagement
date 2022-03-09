@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <limits>
 #include "PowerRange.h"
 
 /**
@@ -57,6 +58,6 @@ protected:
 
 
 private:
-    PowerRange requesting_power{PowerRange{0,(std::numeric_limits<float>::max)()}};
+    PowerRange requesting_power = PowerRange(0,(std::numeric_limits<float>::max)());
     float allowed_power{0.f};
 };

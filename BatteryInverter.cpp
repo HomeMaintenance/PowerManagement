@@ -1,4 +1,3 @@
-#pragma once
 #include "BatteryInverter.h"
 
 BatteryInverter::BatteryInverter(){}

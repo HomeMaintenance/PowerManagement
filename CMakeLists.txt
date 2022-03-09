@@ -29,11 +29,19 @@ find_path(CPP_HTTPLIB_INCLUDE_DIRS "httplib.h")
 target_include_directories(PowerManagement PUBLIC ${CPP_HTTPLIB_INCLUDE_DIRS})
 
 find_package(jsoncpp CONFIG REQUIRED)
+if(DEFINED CROSS_COMPILE)
+target_link_libraries(PowerManagement PUBLIC
+    jsoncpp_object
+    jsoncpp_static
+    JsonCpp::JsonCpp
+)
+else()
 target_link_libraries(PowerManagement PUBLIC
     jsoncpp_lib
     jsoncpp_object
     JsonCpp::JsonCpp
 )
+endif()
 
 if(PROJECT_IS_TOP_LEVEL)
     find_package(Doxygen
