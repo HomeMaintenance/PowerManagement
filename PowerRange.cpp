@@ -35,7 +35,8 @@ void PowerRange::ceil(){
 
 void PowerRange::mean(){
     float avg = (max + min)/2;
-    max, min = avg;
+    max = avg;
+    min = avg;
 }
 
 
