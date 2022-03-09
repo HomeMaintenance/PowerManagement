@@ -48,10 +48,15 @@ float PowerManager::distribute(){
         _power_grid = pwr_grd->get_power();
     dist_buffer.grid = _power_grid;
 
+    float battery_power = 0;
+    if(auto _battery_manager = battery_manager.lock()){
+        battery_power = _battery_manager->available_power();
+    }
+
     float _available_power = available_power();
     dist_buffer.available = _available_power;
 
-    float power = _available_power - _power_grid - power_buffer;
+    float power = _available_power + battery_power - _power_grid - power_buffer;
     dist_buffer.power = power;
     dist_buffer.buffer = power_buffer;
 
@@ -60,7 +65,7 @@ float PowerManager::distribute(){
         if(!sink)
             continue;
         float grant_power = power;
-        PowerRange sink_requesting_power = sink->get_requesting_power();
+        const PowerRange sink_requesting_power = sink->get_requesting_power();
         if(grant_power >= sink_requesting_power.get_min() && sink_requesting_power.get_max() > 0){
             if(grant_power > sink_requesting_power.get_max())
                 grant_power = sink_requesting_power.get_max();
