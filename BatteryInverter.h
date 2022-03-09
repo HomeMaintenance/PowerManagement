@@ -15,9 +15,9 @@ public:
     /**
      * @brief Get the available power [W]
      *
-     * @return float
+     * @return float, Pos: power is available. Neg: power is needed for charging. [W]
      */
-    float get_available_power();
+    virtual float get_available_power();
 
     /**
      * @brief Get soc of the battery [%]
