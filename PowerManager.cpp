@@ -89,11 +89,18 @@ float PowerManager::distribute(){
 
 float PowerManager::available_power(){
     float result = 0.f;
+
+    std::unordered_map<std::string, float> generation;
+
     for(const auto& s: sources){
         if(auto source = s.lock()){
-            result += source->get_available_power();
+            const auto source_power = source->get_available_power();
+            generation[source->name] = source_power;
+            result += source_power;
         }
     }
+
+    dist_buffer.generation = generation;
     return result;
 }
 

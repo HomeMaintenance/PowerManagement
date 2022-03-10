@@ -79,6 +79,7 @@ public:
         float grid;
         float buffer;
         std::weak_ptr<BatteryManager> battery_manager;
+        std::unordered_map<std::string, float> generation;
         std::unordered_map<std::string, float> distribution;
         Json::Value toJson() const{
             Json::Value jsonData;
@@ -100,6 +101,11 @@ public:
                 jsonDistribution[d.first] = d.second;
             }
             jsonData["distribution"] = jsonDistribution;
+            Json::Value jsonGeneration;
+            for(const auto& g: generation){
+                jsonDistribution[g.first] = g.second;
+            }
+            jsonData["generation"] = jsonGeneration;
             return jsonData;
         }
     };
