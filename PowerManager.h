@@ -101,9 +101,9 @@ public:
                 jsonDistribution[d.first] = d.second;
             }
             jsonData["distribution"] = jsonDistribution;
-            Json::Value jsonGeneration;
+            Json::Value jsonGeneration{};
             for(const auto& g: generation){
-                jsonDistribution[g.first] = g.second;
+                jsonGeneration[g.first] = g.second;
             }
             jsonData["generation"] = jsonGeneration;
             return jsonData;
