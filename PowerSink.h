@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <limits>
+#include <httplib.h>
 #include "PowerRange.h"
 
 /**
@@ -43,6 +44,8 @@ public:
      * @return PowerRange
      */
     PowerRange get_requesting_power() const;
+
+    virtual void register_http_server_functions(httplib::Server* svr);
 
 protected:
     /**

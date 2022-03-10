@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
 
     svr->stop();
     powerManager.stop_loop();
-
+    server_thread.join();
 
     return 0;
 }
