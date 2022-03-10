@@ -29,6 +29,18 @@ void PowerSink::set_requesting_power(float min, float max){
     requesting_power = PowerRange(min, max);
 }
 
+Json::Value PowerSink::serialize(){
+    Json::Value jsonData;
+    jsonData["using_power"] = using_power();
+    jsonData["allowed_power"] = get_allowed_power();
+
+    Json::Value req_pwr;
+    req_pwr["min"] = requesting_power.get_min();
+    req_pwr["max"] = requesting_power.get_max();
+    jsonData["requesting_power"] = req_pwr;
+    return jsonData;
+}
+
 std::string convert_to_string(const Json::Value& json);
 void PowerSink::register_http_server_functions(httplib::Server* svr){
     svr->Get(
@@ -38,14 +50,5 @@ void PowerSink::register_http_server_functions(httplib::Server* svr){
         {
             Json::Value jsonData;
             jsonData["using_power"] = using_power();
-            jsonData["allowed_power"] = get_allowed_power();
-
-            Json::Value req_pwr;
-            req_pwr["min"] = requesting_power.get_min();
-            req_pwr["max"] = requesting_power.get_max();
-            jsonData["requesting_power"] = req_pwr;
-
-            std::string content = convert_to_string(jsonData);
-            res.set_content(content, "application/json");
         });
-};
+}

@@ -60,6 +60,8 @@ float PowerManager::distribute(){
     dist_buffer.power = power;
     dist_buffer.buffer = power_buffer;
 
+    std::unordered_map<std::string, float> _pwr_dist;
+
     for(const auto& s: sinks){
         auto sink = s.lock();
         if(!sink)
@@ -79,10 +81,11 @@ float PowerManager::distribute(){
         else{
             sink->allow_power(0); // switch off
         }
-        power_distribution[sink->name] = sink->using_power();
-        dist_buffer.distribution = power_distribution;
+        _pwr_dist[sink->name] = sink->using_power();
         power -= sink->using_power();
     }
+    power_distribution = _pwr_dist;
+    dist_buffer.distribution = power_distribution;
     dist_buffer.remaining = power;
     return power; // return remaining power
 }
@@ -122,9 +125,8 @@ void PowerManager::stop_loop(){
 }
 
 void PowerManager::register_http_server_functions(httplib::Server* svr){
-    const std::string prefix = "/PowerManager";
     svr->Get(
-        prefix+"/status",
+        "/PowerManager/status",
         [this]
         (const httplib::Request &req, httplib::Response &res)
         {

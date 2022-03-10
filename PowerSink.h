@@ -2,6 +2,7 @@
 #include <string>
 #include <limits>
 #include <httplib.h>
+#include <json/json.h>
 #include "PowerRange.h"
 
 /**
@@ -46,6 +47,8 @@ public:
     PowerRange get_requesting_power() const;
 
     virtual void register_http_server_functions(httplib::Server* svr);
+
+    virtual Json::Value serialize();
 
 protected:
     /**
