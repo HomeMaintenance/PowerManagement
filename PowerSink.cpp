@@ -48,7 +48,7 @@ void PowerSink::register_http_server_functions(httplib::Server* svr){
         [this]
         (const httplib::Request &req, httplib::Response &res)
         {
-            Json::Value jsonData;
-            jsonData["using_power"] = using_power();
+            std::string content = convert_to_string(serialize());
+            res.set_content(content, "application/json");
         });
 }
