@@ -8,7 +8,7 @@
 class PowerSource{
 public:
     PowerSource(std::string name);
-    ~PowerSource() = default;
+    virtual ~PowerSource() = default;
 
     /**
      * @brief Get the available power
