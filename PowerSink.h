@@ -15,6 +15,8 @@ public:
 
     const std::string name;
 
+    static const std::string type;
+
     /**
      * @brief Get the power actually used by the sink
      *

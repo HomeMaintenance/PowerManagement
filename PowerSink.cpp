@@ -1,6 +1,8 @@
 #include "PowerSink.h"
 #include <json/json.h>
 
+const std::string PowerSink::type = "default";
+
 PowerSink::PowerSink(std::string _name): name(_name) {}
 
 float PowerSink::get_allowed_power() const { return allowed_power; }
@@ -31,6 +33,7 @@ void PowerSink::set_requesting_power(float min, float max){
 
 Json::Value PowerSink::serialize(){
     Json::Value jsonData;
+    jsonData["type"] = type;
     jsonData["using_power"] = using_power();
     jsonData["allowed_power"] = get_allowed_power();
 
