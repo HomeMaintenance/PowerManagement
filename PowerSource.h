@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <json/json.h>
 
 /**
  * @brief Used to add a source to the #PowerManager
@@ -9,6 +10,8 @@ class PowerSource{
 public:
     PowerSource(std::string name);
     virtual ~PowerSource() = default;
+
+    virtual Json::Value toJson() const;
 
     /**
      * @brief Get the available power

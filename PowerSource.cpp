@@ -10,3 +10,9 @@ void PowerSource::set_available_power(float value){
     if(value != available_power)
         available_power = value;
 }
+
+Json::Value PowerSource::toJson() const{
+    Json::Value jsonData;
+    jsonData["available_power"] = available_power;
+    return jsonData;
+}

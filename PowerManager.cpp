@@ -93,17 +93,13 @@ float PowerManager::distribute(){
 float PowerManager::available_power(){
     float result = 0.f;
 
-    std::unordered_map<std::string, float> generation;
-
     for(const auto& s: sources){
         if(auto source = s.lock()){
             const auto source_power = source->get_available_power();
-            generation[source->name] = source_power;
             result += source_power;
         }
     }
 
-    dist_buffer.generation = generation;
     return result;
 }
 
@@ -131,6 +127,14 @@ void PowerManager::register_http_server_functions(httplib::Server* svr){
         (const httplib::Request &req, httplib::Response &res)
         {
             Json::Value jsonData = dist_buffer.toJson();
+            Json::Value jsonGeneration;
+            for(const auto& s: sources){
+                auto source = s.lock();
+                if(!source)
+                    continue;
+                jsonGeneration[source->name] = source->toJson();
+            }
+            jsonData["generation"] = jsonGeneration;
             std::string content = convert_to_string(jsonData);
             res.set_content(content, "application/json");
         });
