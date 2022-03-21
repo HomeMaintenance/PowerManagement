@@ -10,6 +10,37 @@
 #include "PowerGrid.h"
 #include "BatteryManager.h"
 
+
+struct DistributeData{
+    float remaining;
+    float available;
+    float power;
+    float grid;
+    float buffer;
+    std::weak_ptr<BatteryManager> battery_manager;
+    std::unordered_map<std::string, float> generation;
+    std::unordered_map<std::string, float> distribution;
+    Json::Value toJson() const{
+        Json::Value jsonData;
+        jsonData["remaining"] = remaining;
+        jsonData["available"] = available;
+        jsonData["power"] = power;
+        jsonData["grid"] = grid;
+        jsonData["buffer"] = buffer;
+        Json::Value jsonDistribution;
+        for(const auto& d: distribution){
+            jsonDistribution[d.first] = d.second;
+        }
+        jsonData["distribution"] = jsonDistribution;
+        Json::Value jsonGeneration{};
+        for(const auto& g: generation){
+            jsonGeneration[g.first] = g.second;
+        }
+        jsonData["generation"] = jsonGeneration;
+        return jsonData;
+    }
+};
+
 /**
  * @brief Manager of power between multiple #PowerSource and #PowerSink
  *
@@ -70,45 +101,6 @@ public:
     void stop_loop();
 
     void register_http_server_functions(httplib::Server* svr);
-
-
-    struct DistributeData{
-        float remaining;
-        float available;
-        float power;
-        float grid;
-        float buffer;
-        std::weak_ptr<BatteryManager> battery_manager;
-        std::unordered_map<std::string, float> generation;
-        std::unordered_map<std::string, float> distribution;
-        Json::Value toJson() const{
-            Json::Value jsonData;
-            jsonData["remaining"] = remaining;
-            jsonData["available"] = available;
-            jsonData["power"] = power;
-            jsonData["grid"] = grid;
-            jsonData["buffer"] = buffer;
-            Json::Value jsonBattery;
-            if(const auto& bm = battery_manager.lock()){
-                jsonBattery["soc"] = bm->soc();
-                jsonBattery["power"] = bm->available_power();
-                jsonBattery["discharge"] = bm->present_discharge();
-                jsonBattery["charge"] = bm->present_charge();
-            }
-            jsonData["battery"] = jsonBattery;
-            Json::Value jsonDistribution;
-            for(const auto& d: distribution){
-                jsonDistribution[d.first] = d.second;
-            }
-            jsonData["distribution"] = jsonDistribution;
-            Json::Value jsonGeneration{};
-            for(const auto& g: generation){
-                jsonGeneration[g.first] = g.second;
-            }
-            jsonData["generation"] = jsonGeneration;
-            return jsonData;
-        }
-    };
 
     DistributeData dist_buffer;
 

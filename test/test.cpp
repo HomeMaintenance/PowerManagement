@@ -23,8 +23,8 @@ int main(int argc, char* argv[])
     std::signal(SIGINT, signal_handler);
     std::cout << "Hello, world!" << std::endl;
 
-    std::shared_ptr<TestBatteryInverter> myInverter0 = std::make_shared<TestBatteryInverter>();
-    std::shared_ptr<TestBatteryInverter> myInverter1 = std::make_shared<TestBatteryInverter>();
+    std::shared_ptr<TestBatteryInverter> myInverter0 = std::make_shared<TestBatteryInverter>("myInverter0");
+    std::shared_ptr<TestBatteryInverter> myInverter1 = std::make_shared<TestBatteryInverter>("myInverter1");
     std::shared_ptr<BatteryManager> myManager = std::make_shared<BatteryManager>("myManager", std::vector<std::weak_ptr<BatteryInverter>>({myInverter0, myInverter1}));
     float available_power = myManager->available_power();
     std::cout << "available_power: " << available_power << std::endl;

@@ -2,11 +2,12 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <map>
 #include "BatteryInverter.h"
 
 /**
  * @brief BatteryManager
- * Used to manage multiple battery inverters
+ * Used to manage multiple battery _inverters
  *
  */
 class BatteryManager{
@@ -15,9 +16,9 @@ public:
      * @brief Construct a new Battery Manager object
      *
      * @param name Name of the battery manager
-     * @param inverters Vector of battery inverters
+     * @param _inverters Vector of battery _inverters
      */
-    BatteryManager(std::string name, std::vector<std::weak_ptr<BatteryInverter>> inverters = {});
+    BatteryManager(std::string name, std::vector<std::weak_ptr<BatteryInverter>> _inverters = {});
     std::string name;
     /**
      * @brief Add a battery inverter
@@ -67,14 +68,21 @@ public:
      * @return float [Wh]
      */
     float missing_charge(); // Wh
+
+    std::vector<std::weak_ptr<BatteryInverter>> inverters() const;
+
+    std::map<std::string, bool> online_inverters() const;
+
+    virtual Json::Value toJson();
+
 protected:
 private:
     /**
-     * @brief Call function of inverters and return sum of results
+     * @brief Call function of _inverters and return sum of results
      *
      * @param func Function to call of #BatteryInverter
      * @return float sum of results
      */
     float inverters_read_property(float (BatteryInverter::*func)());
-    std::vector<std::weak_ptr<BatteryInverter>> inverters;
+    std::vector<std::weak_ptr<BatteryInverter>> _inverters;
 };

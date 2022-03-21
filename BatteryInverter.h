@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+#include <json/json.h>
 
 /**
  * @brief Abstract class for an Inverter that can be used in an #BatteryManager instance.
@@ -10,7 +12,7 @@ public:
      * @brief Construct a new Battery Inverter object
      *
      */
-    BatteryInverter();
+    BatteryInverter(const std::string& name);
 
     /**
      * @brief Get the available power [W]
@@ -62,6 +64,13 @@ public:
 
     virtual float max_discharge_rate() const = 0;
 
+    virtual bool online() const = 0;
+
+    std::string name() const;
+    void setName(const std::string& name);
+
+    virtual Json::Value toJson();
+
 protected:
     /**
      * @brief Set the available power object
@@ -72,4 +81,5 @@ protected:
 
 private:
     float available_power{0};
+    std::string _name;
 };

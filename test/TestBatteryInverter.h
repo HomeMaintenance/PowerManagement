@@ -3,7 +3,7 @@
 
 class TestBatteryInverter: public BatteryInverter{
 public:
-    TestBatteryInverter();
+    TestBatteryInverter(const std::string& name);
     float soc() override;
     float present_discharge() override;
     float present_charge() override;
@@ -14,4 +14,7 @@ public:
 
     float max_charge_rate() const override;
     float max_discharge_rate() const override;
+
+    bool online() const final;
+    bool _online{true};
 };

@@ -134,4 +134,32 @@ void PowerManager::register_http_server_functions(httplib::Server* svr){
             std::string content = convert_to_string(jsonData);
             res.set_content(content, "application/json");
         });
+    if(auto bm = battery_manager.lock()){
+        svr->Get(
+        "/BatteryManager/status",
+        [this]
+        (const httplib::Request &req, httplib::Response &res)
+        {
+            Json::Value jsonData;
+            if(const auto& bm = battery_manager.lock()){
+                jsonData = bm->toJson();
+            }
+            std::string content = convert_to_string(jsonData);
+            res.set_content(content, "application/json");
+        });
+
+        for(const auto& i: bm->inverters()){
+            if(auto inverter = i.lock()){
+                svr->Get(
+                "/BatteryManager/Inverter/"+inverter->name()+"/status",
+                [this, inverter]
+                (const httplib::Request &req, httplib::Response &res)
+                {
+                    Json::Value jsonData = inverter->toJson();
+                    std::string content = convert_to_string(jsonData);
+                    res.set_content(content, "application/json");
+                });
+            }
+        }
+    }
 }

@@ -19,7 +19,7 @@ public:
     const std::string name;
 protected:
     /**
-     * @brief Set the available powe
+     * @brief Set the available power
      *
      * @param value [W]
      */

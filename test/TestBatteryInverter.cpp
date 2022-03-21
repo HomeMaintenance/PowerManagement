@@ -1,6 +1,6 @@
 #include "TestBatteryInverter.h"
 
-TestBatteryInverter::TestBatteryInverter(): BatteryInverter() {}
+TestBatteryInverter::TestBatteryInverter(const std::string& name): BatteryInverter(name) {}
 
 float TestBatteryInverter::soc() {
     return 0.47;
@@ -33,3 +33,8 @@ float TestBatteryInverter::max_charge_rate() const{
 float TestBatteryInverter::max_discharge_rate() const{
     return 4500;
 }
+
+bool TestBatteryInverter::online() const
+{
+    return _online;
+};
