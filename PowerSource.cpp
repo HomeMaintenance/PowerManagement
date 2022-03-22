@@ -13,6 +13,6 @@ void PowerSource::set_available_power(float value){
 
 Json::Value PowerSource::toJson() const{
     Json::Value jsonData;
-    jsonData["available_power"] = available_power;
+    jsonData["available_power"] = get_available_power();
     return jsonData;
 }
