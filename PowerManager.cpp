@@ -60,7 +60,8 @@ float PowerManager::distribute(){
     }
 
     float battery_power = 0;
-    if(auto _battery_manager = battery_manager.lock()){
+    auto _battery_manager = battery_manager.lock();
+    if(use_battery_power && _battery_manager){
         battery_power = _battery_manager->available_power();
     }
 

@@ -98,6 +98,8 @@ public:
 
     DistributeData dist_buffer;
 
+    bool use_battery_power = true;
+
 protected:
 private:
     /**
