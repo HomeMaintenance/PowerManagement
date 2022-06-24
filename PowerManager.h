@@ -98,7 +98,8 @@ public:
 
     DistributeData dist_buffer;
 
-    bool use_battery_power = true;
+    void set_use_battery_power(bool value); // default true
+    bool get_use_battery_power() const;
 
 protected:
 private:
@@ -124,4 +125,5 @@ private:
     void distribute_loop();
     float distribute_period = 5; // seconds
     bool distribute_run;
+    bool use_battery_power = true;
 };

@@ -176,3 +176,12 @@ void PowerManager::register_http_server_functions(httplib::Server* svr){
         }
     }
 }
+
+
+void PowerManager::set_use_battery_power(bool value){
+    use_battery_power = value;
+}
+
+bool PowerManager::get_use_battery_power() const {
+    return use_battery_power;
+}
