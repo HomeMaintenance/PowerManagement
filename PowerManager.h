@@ -17,7 +17,6 @@ struct DistributeData{
     float power;
     float grid;
     float buffer;
-    std::weak_ptr<BatteryManager> battery_manager;
     std::unordered_map<std::string, float> distribution;
     Json::Value toJson() const{
         Json::Value jsonData;

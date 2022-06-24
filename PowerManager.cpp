@@ -17,7 +17,7 @@ PowerManager::PowerManager(
     ):
     sources(_sources), sinks(_sinks)
 {
-    dist_buffer.battery_manager = battery_manager;
+
 }
 
 void PowerManager::add_source(std::weak_ptr<PowerSource> source){
@@ -30,7 +30,6 @@ void PowerManager::add_sink(std::weak_ptr<PowerSink> sink){
 
 void PowerManager::set_battery_manager(std::weak_ptr<BatteryManager> _battery_manager){
     battery_manager = _battery_manager;
-    dist_buffer.battery_manager = battery_manager;
 }
 
 std::unordered_map<std::string, float> PowerManager::get_power_distribution() const {
@@ -156,9 +155,14 @@ void PowerManager::register_http_server_functions(httplib::Server* svr){
             Json::Value jsonData;
             if(const auto& bm = battery_manager.lock()){
                 jsonData = bm->toJson();
+                std::string content = convert_to_string(jsonData);
+                res.set_content(content, "application/json");
+                res.status = 200;
             }
-            std::string content = convert_to_string(jsonData);
-            res.set_content(content, "application/json");
+            else{
+                res.set_content("battery manager is not available", "text/plain");
+                res.status = 500;
+            }
         });
 
         for(const auto& i: bm->inverters()){
