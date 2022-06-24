@@ -34,11 +34,10 @@ void PowerManager::set_battery_manager(std::weak_ptr<BatteryManager> _battery_ma
 }
 
 std::unordered_map<std::string, float> PowerManager::get_power_distribution() const {
-    return {};
+    return power_distribution;
 }
 
 void PowerManager::set_power_grid(std::weak_ptr<PowerGrid> grid){
-
     power_grid = grid;
 }
 
@@ -49,6 +48,10 @@ float PowerManager::distribute(){
         _power_grid = pwr_grd->get_power();
         dist_buffer.grid = _power_grid;
         dist_buffer.available = 0;
+        for(const auto& i: power_distribution){
+            // Needed because otherwise the already turned on devices would be ignored
+            _available_power += i.second;
+        }
     }
     else{
        _available_power = available_power();
