@@ -73,7 +73,8 @@ public:
      */
     std::unordered_map<std::string, float> get_power_distribution() const;
 
-    float power_buffer = 0;
+    void set_power_buffer(float buffer);
+    float get_power_buffer() const;
 
     /**
      * @brief Set a function to allow the manager to get the power status to the grid
@@ -117,7 +118,7 @@ private:
     std::vector<std::weak_ptr<PowerSource>> sources;
     std::vector<std::weak_ptr<PowerSink>> sinks;
     std::weak_ptr<BatteryManager> battery_manager;
-
+    float power_buffer{0};
 
     float distribute_remaining{0.0f};
     std::unique_ptr<std::thread> distribute_thread;

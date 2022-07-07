@@ -36,6 +36,14 @@ std::unordered_map<std::string, float> PowerManager::get_power_distribution() co
     return power_distribution;
 }
 
+void PowerManager::set_power_buffer(float buffer){
+    power_buffer = buffer;
+}
+
+float PowerManager::get_power_buffer() const{
+    return power_buffer;
+}
+
 void PowerManager::set_power_grid(std::weak_ptr<PowerGrid> grid){
     power_grid = grid;
 }
