@@ -62,7 +62,7 @@ float PowerManager::distribute(){
     }
     else{
        _available_power = available_power();
-        dist_buffer.grid = 0;
+       dist_buffer.grid = 0;
        dist_buffer.available = _available_power;
     }
 
@@ -73,6 +73,7 @@ float PowerManager::distribute(){
     }
 
     float power = _available_power + battery_power - _power_grid - power_buffer;
+    log("remaining Power: " + std::to_string(power));
     dist_buffer.power = power;
     dist_buffer.buffer = power_buffer;
 
@@ -103,6 +104,7 @@ float PowerManager::distribute(){
     power_distribution = _pwr_dist;
     dist_buffer.distribution = power_distribution;
     dist_buffer.remaining = power;
+    log("remaining Power: " + std::to_string(power));
     return power; // return remaining power
 }
 
@@ -196,4 +198,18 @@ void PowerManager::set_use_battery_power(bool value){
 
 bool PowerManager::get_use_battery_power() const {
     return use_battery_power;
+}
+
+void PowerManager::enable_log(){
+    _enable_log = true;
+}
+
+void PowerManager::disable_log(){
+    _enable_log = false;
+}
+
+void PowerManager::log(std::string message) const
+{
+    if(_enable_log)
+        std::cout << "-- Powermanager: " << message << std::endl;
 }
