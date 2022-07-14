@@ -52,6 +52,7 @@ float PowerManager::distribute(){
     float _power_grid = 0.f;
     float _available_power = 0.f;
     if(auto pwr_grd = power_grid.lock()){
+        // Use power grid as reference when set
         _power_grid = pwr_grd->get_power();
         dist_buffer.grid = _power_grid;
         dist_buffer.available = 0;
@@ -61,9 +62,10 @@ float PowerManager::distribute(){
         }
     }
     else{
-       _available_power = available_power();
-       dist_buffer.grid = 0;
-       dist_buffer.available = _available_power;
+        // Use power from inverters in sources if power_grid is not set
+        _available_power = available_power();
+        dist_buffer.grid = 0;
+        dist_buffer.available = _available_power;
     }
 
     float battery_power = 0;
@@ -71,9 +73,14 @@ float PowerManager::distribute(){
     if(use_battery_power && _battery_manager){
         battery_power = _battery_manager->available_power();
     }
+    log("Power available from sources: " + std::to_string(_available_power));
+    log("Power from Battery: " + std::to_string(battery_power));
+    log("Power from Grid: " + std::to_string(_power_grid));
 
-    float power = _available_power + battery_power - _power_grid - power_buffer;
-    log("remaining Power: " + std::to_string(power));
+    float power_wo_buffer = _available_power + battery_power - _power_grid;
+    log("Power available: " + std::to_string(power_wo_buffer));
+    float power = power - power_buffer;
+    log("Power available with buffer: " + std::to_string(power));
     dist_buffer.power = power;
     dist_buffer.buffer = power_buffer;
 
