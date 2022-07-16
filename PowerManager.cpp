@@ -68,6 +68,8 @@ float PowerManager::distribute(){
         dist_buffer.available = _available_power;
     }
 
+
+    // Get available power from battery
     float battery_power = 0;
     auto _battery_manager = battery_manager.lock();
     if(use_battery_power && _battery_manager){
@@ -77,6 +79,7 @@ float PowerManager::distribute(){
     log("Power from Battery: " + std::to_string(battery_power));
     log("Power from Grid: " + std::to_string(_power_grid));
 
+    // Calculate available power from sources, battery and grid
     float power_wo_buffer = _available_power + battery_power - _power_grid;
     log("Power available: " + std::to_string(power_wo_buffer));
     float power = power_wo_buffer - power_buffer;
@@ -95,14 +98,18 @@ float PowerManager::distribute(){
         if(grant_power >= sink_requesting_power.get_min() && sink_requesting_power.get_max() > 0){
             if(grant_power > sink_requesting_power.get_max())
                 grant_power = sink_requesting_power.get_max();
+            log("\tGranting " + sink->name + std::to_string(grant_power));
             if( sink->allow_power(grant_power) ){
                 // success
+                log("\t\taccepted");
             }
             else{
                 // failed to accept power
+                log("\t\trejected");
             }
         }
         else{
+            log("\tSwitching "+ sink->name + " off");
             sink->allow_power(0); // switch off
         }
         _pwr_dist[sink->name] = sink->using_power();
