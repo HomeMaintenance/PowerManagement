@@ -61,7 +61,6 @@ protected:
      *
      */
     virtual void set_requesting_power(const PowerRange& range);
-    virtual void set_requesting_power(PowerRange& range);
     virtual void set_requesting_power(float min, float max);
 
 

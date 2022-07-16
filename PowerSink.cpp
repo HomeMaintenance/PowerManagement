@@ -23,10 +23,6 @@ void PowerSink::set_requesting_power(const PowerRange& range){
     requesting_power = range;
 }
 
-void PowerSink::set_requesting_power(PowerRange& range){
-    requesting_power = range;
-}
-
 void PowerSink::set_requesting_power(float min, float max){
     requesting_power = PowerRange(min, max);
 }
