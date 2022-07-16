@@ -98,7 +98,7 @@ float PowerManager::distribute(){
         if(grant_power >= sink_requesting_power.get_min() && sink_requesting_power.get_max() > 0){
             if(grant_power > sink_requesting_power.get_max())
                 grant_power = sink_requesting_power.get_max();
-            log("\tGranting " + sink->name + std::to_string(grant_power));
+            log("\tGranting " + sink->name + " " + std::to_string(grant_power) + " W power");
             if( sink->allow_power(grant_power) ){
                 // success
                 log("\t\taccepted");
