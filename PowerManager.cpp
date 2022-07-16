@@ -53,16 +53,19 @@ float PowerManager::distribute(){
     float _available_power = 0.f;
     if(auto pwr_grd = power_grid.lock()){
         // Use power grid as reference when set
+        log("Power grid is reference");
         _power_grid = pwr_grd->get_power();
         dist_buffer.grid = _power_grid;
         dist_buffer.available = 0;
-        for(const auto& i: power_distribution){
+        for(const auto& s: sinks){
             // Needed because otherwise the already turned on devices would be ignored
-            _available_power += i.second;
+            auto sink = s.lock();
+            _available_power += sink->using_power();
         }
     }
     else{
         // Use power from inverters in sources if power_grid is not set
+        log("Sources are reference");
         _available_power = available_power();
         dist_buffer.grid = 0;
         dist_buffer.available = _available_power;
