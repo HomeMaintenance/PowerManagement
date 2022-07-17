@@ -50,9 +50,12 @@ void PowerManager::set_power_grid(std::weak_ptr<PowerGrid> grid){
 
 float PowerManager::distribute(){
     float _power_grid = 0.f;
-    float _available_power = 0.f;
+    float _available_power_sources = available_power();
+    float _available_power_grid = 0.f;
+    bool grid_ref = false;
     if(auto pwr_grd = power_grid.lock()){
         // Use power grid as reference when set
+        grid_ref = true;
         log("Power grid is reference");
         _power_grid = pwr_grd->get_power();
         dist_buffer.grid = _power_grid;
@@ -60,17 +63,17 @@ float PowerManager::distribute(){
         for(const auto& s: sinks){
             // Needed because otherwise the already turned on devices would be ignored
             auto sink = s.lock();
-            _available_power += sink->using_power();
+            _available_power_grid += sink->using_power();
         }
     }
     else{
         // Use power from inverters in sources if power_grid is not set
         log("Sources are reference");
-        _available_power = available_power();
         dist_buffer.grid = 0;
-        dist_buffer.available = _available_power;
+        dist_buffer.available = _available_power_sources;
     }
 
+    float _available_power = grid_ref ? _available_power_grid : _available_power_sources;
 
     // Get available power from battery
     float battery_power = 0;
@@ -78,12 +81,14 @@ float PowerManager::distribute(){
     if(use_battery_power && _battery_manager){
         battery_power = _battery_manager->available_power();
     }
-    log("Power available from sources: " + std::to_string(_available_power));
+    log("Power available from sources: " + std::to_string(_available_power_sources));
+    log("Power available from grid: " + std::to_string(_available_power_grid));
+    log("Power available: " + std::to_string(_available_power));
     log("Power from Battery: " + std::to_string(battery_power));
     log("Power from Grid: " + std::to_string(_power_grid));
 
     // Calculate available power from sources, battery and grid
-    float power_wo_buffer = _available_power + battery_power - _power_grid;
+    float power_wo_buffer = _available_power + battery_power - _power_grid*2;
     log("Power available: " + std::to_string(power_wo_buffer));
     float power = power_wo_buffer - power_buffer;
     log("Power available with buffer: " + std::to_string(power));
