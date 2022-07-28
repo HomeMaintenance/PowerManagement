@@ -76,7 +76,7 @@ float PowerManager::distribute(){
     float _available_power = grid_ref ? _available_power_grid : _available_power_sources;
 
     // Get available power from battery
-    float battery_power = 0;
+    float battery_power = 0.f;
     auto _battery_manager = battery_manager.lock();
     if(use_battery_power && _battery_manager){
         battery_power = _battery_manager->available_power();
@@ -88,7 +88,7 @@ float PowerManager::distribute(){
     log("Power from Grid: " + std::to_string(_power_grid));
 
     // Calculate available power from sources, battery and grid
-    float power_wo_buffer = _available_power + battery_power - _power_grid*2;
+    float power_wo_buffer = _available_power + battery_power - _power_grid;
     log("Power available: " + std::to_string(power_wo_buffer));
     float power = power_wo_buffer - power_buffer;
     log("Power available with buffer: " + std::to_string(power));
