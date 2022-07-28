@@ -88,7 +88,7 @@ float PowerManager::distribute(){
     log("Power from Grid: " + std::to_string(_power_grid));
 
     // Calculate available power from sources, battery and grid
-    float power_wo_buffer = _available_power + battery_power - _power_grid;
+    float power_wo_buffer = _available_power + battery_power + _power_grid;
     log("Power available: " + std::to_string(power_wo_buffer));
     float power = power_wo_buffer - power_buffer;
     log("Power available with buffer: " + std::to_string(power));
