@@ -102,9 +102,6 @@ public:
 
     DistributeData dist_buffer;
 
-    void set_use_battery_power(bool value); // default true
-    bool get_use_battery_power() const;
-
     void enable_log();
     void disable_log();
 
@@ -132,7 +129,6 @@ private:
     void distribute_loop();
     float distribute_period = 5; // seconds
     bool distribute_run;
-    bool use_battery_power = true;
 
     bool _enable_log{false};
     void log(std::string message) const;

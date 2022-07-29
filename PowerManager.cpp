@@ -77,13 +77,13 @@ float PowerManager::distribute(){
 
     // Get available power from battery
     float battery_power = 0.f;
+    float battery_soc = 0.f;
     auto _battery_manager = battery_manager.lock();
     if(_battery_manager){
-        dist_buffer.battery_soc = _battery_manager->soc();
-        if(use_battery_power){
-            battery_power = _battery_manager->available_power();
-        }
+        battery_soc = _battery_manager->soc();
+        battery_power = _battery_manager->available_power();
     }
+    dist_buffer.battery_soc = battery_soc;
     dist_buffer.battery_power = battery_power;
     log("Power available from sources: " + std::to_string(_available_power_sources));
     log("Power available from grid: " + std::to_string(_available_power_grid));
@@ -216,15 +216,6 @@ void PowerManager::register_http_server_functions(httplib::Server* svr){
             }
         }
     }
-}
-
-
-void PowerManager::set_use_battery_power(bool value){
-    use_battery_power = value;
-}
-
-bool PowerManager::get_use_battery_power() const {
-    return use_battery_power;
 }
 
 void PowerManager::enable_log(){
