@@ -17,7 +17,8 @@ struct DistributeData{
     float power;
     float grid;
     float buffer;
-    float battery;
+    float battery_power;
+    float battery_soc;
     std::unordered_map<std::string, float> distribution;
     Json::Value toJson() const{
         Json::Value jsonData;
@@ -26,7 +27,8 @@ struct DistributeData{
         jsonData["power"] = power;
         jsonData["grid"] = grid;
         jsonData["buffer"] = buffer;
-        jsonData["battery"] = battery;
+        jsonData["battery_power"] = battery_power;
+        jsonData["battery_soc"] = battery_soc;
         Json::Value jsonDistribution;
         for(const auto& d: distribution){
             jsonDistribution[d.first] = d.second;
