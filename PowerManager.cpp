@@ -81,6 +81,7 @@ float PowerManager::distribute(){
     if(use_battery_power && _battery_manager){
         battery_power = _battery_manager->available_power();
     }
+    dist_buffer.battery = battery_power;
     log("Power available from sources: " + std::to_string(_available_power_sources));
     log("Power available from grid: " + std::to_string(_available_power_grid));
     log("Power available: " + std::to_string(_available_power));
@@ -120,8 +121,9 @@ float PowerManager::distribute(){
             log("\tSwitching "+ sink->name + " off");
             sink->allow_power(0); // switch off
         }
-        _pwr_dist[sink->name] = sink->using_power();
-        power -= sink->using_power();
+        const float _using_power = sink->using_power();
+        _pwr_dist[sink->name] = _using_power;
+        power -= _using_power;
     }
     power_distribution = _pwr_dist;
     dist_buffer.distribution = power_distribution;
