@@ -18,7 +18,11 @@ float BatteryManager::inverters_read_property(float (BatteryInverter::*func)()){
 }
 
 float BatteryManager::available_power(){
-    return BatteryManager::inverters_read_property(&BatteryInverter::get_available_power);
+    float available = BatteryManager::inverters_read_property(&BatteryInverter::get_available_power);
+    if(_output)
+        return available;
+    else
+        return available > 0.f ? 0.f : available;
 }
 
 float BatteryManager::soc(){
@@ -51,6 +55,18 @@ float BatteryManager::max_capacity(){
 
 float BatteryManager::missing_charge(){
     return BatteryManager::inverters_read_property(&BatteryInverter::missing_charge);
+}
+
+void BatteryManager::enable_output(){
+    _output = true;
+}
+
+void BatteryManager::disable_output(){
+    _output = false;
+}
+
+bool BatteryManager::output_enabled() const{
+    return _output;
 }
 
 std::map<std::string, bool> BatteryManager::online_inverters() const {

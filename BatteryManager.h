@@ -69,6 +69,10 @@ public:
      */
     float missing_charge(); // Wh
 
+    void enable_output();
+    void disable_output();
+    bool output_enabled() const;
+
     std::vector<std::weak_ptr<BatteryInverter>> inverters() const;
 
     std::map<std::string, bool> online_inverters() const;
@@ -85,4 +89,5 @@ private:
      */
     float inverters_read_property(float (BatteryInverter::*func)());
     std::vector<std::weak_ptr<BatteryInverter>> _inverters;
+    bool _output{true};
 };
