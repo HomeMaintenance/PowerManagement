@@ -78,13 +78,16 @@ float PowerManager::distribute(){
     // Get available power from battery
     float battery_power = 0.f;
     float battery_soc = 0.f;
+    float battery_discharge = 0.f;
     auto _battery_manager = battery_manager.lock();
     if(_battery_manager){
         battery_soc = _battery_manager->soc();
         battery_power = _battery_manager->available_power();
+        battery_discharge = _battery_manager->present_discharge();
     }
     dist_buffer.battery_soc = battery_soc;
     dist_buffer.battery_power = battery_power;
+    dist_buffer.battery_discharge = battery_discharge;
     log("Power available from sources: " + std::to_string(_available_power_sources));
     log("Power available from grid: " + std::to_string(_available_power_grid));
     log("Power available: " + std::to_string(_available_power));
