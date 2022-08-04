@@ -116,8 +116,8 @@ PowerManager::DistributionResult PowerManager::distribute(){
         dist_buffer.available = 0;
         for(const auto& s: sinks){
             // Needed because otherwise the already turned on devices would be ignored
-            auto sink = s.lock();
-            _available_power_grid += sink->using_power();
+            if(auto sink = s.lock())
+                _available_power_grid += sink->using_power();
         }
     }
     else{
