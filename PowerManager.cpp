@@ -1,4 +1,57 @@
 #include "PowerManager.h"
+#include <cassert>
+
+void PowerManager::DistributionResult::set_power(float pwr)
+{
+    assert(!(_set&0x1));
+    _power = pwr;
+    _set |= 0x1;
+}
+
+void PowerManager::DistributionResult::set_remaining(float remaining)
+{
+    assert(!(_set&0x2));
+    _remaining = remaining;
+    _set |= 0x2;
+}
+
+void PowerManager::DistributionResult::set_used(float used)
+{
+    assert(!(_set&0x4));
+    _used = used;
+    _set |= 0x4;
+}
+
+void PowerManager::DistributionResult::set_distribution(std::unordered_map<std::string, float>& distribution)
+{
+    assert(!(_set&0x8));
+    _distribution = distribution;
+    _set |= 0x8;
+}
+
+bool PowerManager::DistributionResult::validate() const{
+    return _set == 0xF;
+}
+
+float PowerManager::DistributionResult::get_power() const
+{
+    return _power;
+}
+
+float PowerManager::DistributionResult::get_remaining() const
+{
+    return _remaining;
+}
+
+float PowerManager::DistributionResult::get_used() const
+{
+    return _used;
+}
+
+std::unordered_map<std::string, float> PowerManager::DistributionResult::get_distribution() const
+{
+    return _distribution;
+}
 
 Json::Value convert_to_json(const std::string str){
     Json::Value jsonData;
@@ -48,7 +101,8 @@ void PowerManager::set_power_grid(std::weak_ptr<PowerGrid> grid){
     power_grid = grid;
 }
 
-float PowerManager::distribute(){
+PowerManager::DistributionResult PowerManager::distribute(){
+    DistributionResult result;
     float _power_grid = 0.f;
     float _available_power_sources = available_power();
     float _available_power_grid = 0.f;
@@ -98,11 +152,14 @@ float PowerManager::distribute(){
     float power_wo_buffer = _available_power + battery_power + _power_grid;
     log("Power available: " + std::to_string(power_wo_buffer));
     float power = power_wo_buffer - power_buffer;
+    result.set_power(power);
     log("Power available with buffer: " + std::to_string(power));
     dist_buffer.power = power;
     dist_buffer.buffer = power_buffer;
 
     std::unordered_map<std::string, float> _pwr_dist;
+
+    float power_used = 0.f;
 
     for(const auto& s: sinks){
         auto sink = s.lock();
@@ -128,14 +185,19 @@ float PowerManager::distribute(){
             sink->allow_power(0); // switch off
         }
         const float _using_power = sink->using_power();
+        power_used += _using_power;
         _pwr_dist[sink->name] = _using_power;
         power -= _using_power;
     }
+    result.set_used(power_used);
+    result.set_distribution(_pwr_dist);
     power_distribution = _pwr_dist;
     dist_buffer.distribution = power_distribution;
+    result.set_remaining(power);
     dist_buffer.remaining = power;
     log("remaining Power: " + std::to_string(power));
-    return power; // return remaining power
+    assert(result.validate());
+    return result; // return remaining power
 }
 
 float PowerManager::available_power(){

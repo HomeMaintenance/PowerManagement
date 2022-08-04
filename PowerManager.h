@@ -57,6 +57,25 @@ public:
         std::vector<std::weak_ptr<PowerSink>> sinks = {}
     );
 
+    struct DistributionResult {
+    public:
+        void set_power(float pwr);
+        float get_power() const;
+        void set_remaining(float remaining);
+        float get_remaining() const;
+        void set_used(float used);
+        float get_used() const;
+        void set_distribution(std::unordered_map<std::string, float>& distribution);
+        std::unordered_map<std::string, float> get_distribution() const;
+        bool validate() const;
+    private:
+        uint8_t _set{0};
+        float _power;
+        float _remaining;
+        float _used;
+        std::unordered_map<std::string, float> _distribution;
+    };
+
     /**
      * @brief Add a source to the manager
      *
@@ -94,7 +113,7 @@ public:
      *
      * @return float Remaining power which couldn't be distributed
      */
-    float distribute();
+    DistributionResult distribute();
 
     void start_loop();
 
