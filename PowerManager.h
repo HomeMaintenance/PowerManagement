@@ -123,6 +123,9 @@ public:
 
     DistributeData dist_buffer;
 
+    void use_power_from_sources();
+    void use_power_from_grid();
+
     void enable_log();
     void disable_log();
 
@@ -153,4 +156,10 @@ private:
 
     bool _enable_log{false};
     void log(std::string message) const;
+
+    enum PowerFrom{
+        Sources,
+        Grid
+    };
+    PowerFrom _power_from{PowerFrom::Sources};
 };

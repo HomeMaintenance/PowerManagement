@@ -103,21 +103,26 @@ void PowerManager::set_power_grid(std::weak_ptr<PowerGrid> grid){
 
 PowerManager::DistributionResult PowerManager::distribute(){
     DistributionResult result;
+
     float _power_grid = 0.f;
-    float _available_power_sources = available_power();
-    float _available_power_grid = 0.f;
-    bool grid_ref = false;
     if(auto pwr_grd = power_grid.lock()){
         // Use power grid as reference when set
-        grid_ref = true;
         log("Power grid is reference");
         _power_grid = pwr_grd->get_power();
+    }
+
+    float _available_power_grid = 0.f;
+    float _available_power_sources = available_power();
+    bool grid_ref = _power_from == PowerFrom::Grid;
+    if(grid_ref){
         dist_buffer.grid = _power_grid;
         dist_buffer.available = 0;
         for(const auto& s: sinks){
             // Needed because otherwise the already turned on devices would be ignored
-            if(auto sink = s.lock())
-                _available_power_grid += sink->using_power();
+            auto sink = s.lock();
+            if(!sink)
+                continue;
+            _available_power_grid += sink->using_power();
         }
     }
     else{
@@ -281,6 +286,14 @@ void PowerManager::register_http_server_functions(httplib::Server* svr){
             }
         }
     }
+}
+
+void PowerManager::use_power_from_sources(){
+    _power_from = PowerFrom::Sources;
+}
+
+void PowerManager::use_power_from_grid(){
+    _power_from = PowerFrom::Grid;
 }
 
 void PowerManager::enable_log(){
