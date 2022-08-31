@@ -189,10 +189,10 @@ PowerManager::DistributionResult PowerManager::distribute(){
             log("\tSwitching "+ sink->name + " off");
             sink->allow_power(0); // switch off
         }
-        const float _using_power = sink->using_power();
-        power_used += _using_power;
-        _pwr_dist[sink->name] = _using_power;
-        power -= _using_power;
+        const float _allowed_power = sink->get_allowed_power();
+        power_used += _allowed_power;
+        _pwr_dist[sink->name] = _allowed_power;
+        power -= _allowed_power;
     }
     result.set_used(power_used);
     result.set_distribution(_pwr_dist);
