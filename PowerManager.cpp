@@ -155,7 +155,7 @@ PowerManager::DistributionResult PowerManager::distribute(){
         dist_buffer.available = _available_power_sources;
     }
 
-    float _available_power = grid_ref ? _available_power_grid : _available_power_sources;
+    _available_power = grid_ref ? _available_power_grid : _available_power_sources;
 
     // Get available power from battery
     float battery_power = 0.f;

@@ -103,9 +103,6 @@ public:
     void set_power_buffer(float buffer);
     float get_power_buffer() const;
 
-
-    float power_buffer = 0;
-
     /**
      * @brief Set a function to allow the manager to get the power status to the grid
      *
