@@ -21,9 +21,19 @@ Json::Value PowerBalance::toJson() const {
 
 void PowerBalance::register_http_server_functions(httplib::Server* svr){
     svr->Get("/PowerBalance/json", [this](const httplib::Request& request, httplib::Response& response){
-        response.status = 200;
-        response.set_content(convert_to_string(toJson()),"application/json");
+        update();
+        if(update_valid){
+            response.status = 200;
+            response.set_content(convert_to_string(toJson()),"application/json");
+        }
+        else{
+            response.status = 500;
+        }
     });
+}
+
+void PowerBalance::setPowerManager(std::weak_ptr<PowerManager> pm){
+    powerManager = pm;
 }
 
 
@@ -42,4 +52,24 @@ std::unordered_map<std::string, float> PowerBalance::getPowerDistribution() cons
 
 void PowerBalance::setPowerDistribution(const std::unordered_map<std::string, float>& map){
     power_distribution = map;
+}
+
+float PowerBalance::getGridPower() const{
+    return grid_power;
+}
+
+void PowerBalance::setGridPower(const float& value){
+    grid_power = value;
+}
+
+void PowerBalance::update(){
+    if(auto pm = powerManager.lock()){
+        setPowerDistribution(pm->get_power_distribution());
+        setPowerGeneration(pm->get_power_generation());
+        setGridPower(pm->get_grid_power());
+        update_valid = true;
+    }
+    else{
+        update_valid = false;
+    }
 }
