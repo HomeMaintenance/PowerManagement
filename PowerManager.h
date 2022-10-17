@@ -146,7 +146,7 @@ private:
     std::weak_ptr<PowerGrid> power_grid;
     std::unordered_map<std::string, float> power_distribution;
     std::unordered_map<std::string, float> power_generation;
-    float grid_power_value;
+    float grid_power_value{0};
     std::vector<std::weak_ptr<PowerSource>> sources;
     std::vector<std::weak_ptr<PowerSink>> sinks;
     std::weak_ptr<BatteryManager> battery_manager;
