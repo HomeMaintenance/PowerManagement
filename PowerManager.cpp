@@ -64,6 +64,17 @@ std::string convert_to_string(const Json::Value& json){
     return Json::FastWriter().write(json);
 }
 
+float sumUp(const std::unordered_map<std::string, float>& power_map){
+    float result = 0;
+    std::for_each(power_map.begin(), power_map.end(),
+        [&result](const std::pair<std::string, float> &n) mutable
+        {
+            result += n.second;
+        }
+    );
+    return result;
+}
+
 PowerManager::PowerManager(
         std::vector<std::weak_ptr<PowerSource>> _sources,
         std::vector<std::weak_ptr<PowerSink>> _sinks
@@ -97,6 +108,14 @@ float PowerManager::get_power_buffer() const{
     return power_buffer;
 }
 
+std::unordered_map<std::string, float> PowerManager::get_power_generation() const {
+    return power_generation;
+}
+
+float PowerManager::get_grid_power() const {
+    return grid_power_value;
+}
+
 void PowerManager::set_power_grid(std::weak_ptr<PowerGrid> grid){
     power_grid = grid;
 }
@@ -105,6 +124,9 @@ PowerManager::DistributionResult PowerManager::distribute(){
     DistributionResult result;
 
     float _power_grid = 0.f;
+    float _available_power = 0.f;
+    power_generation = available_power();
+
     if(auto pwr_grd = power_grid.lock()){
         // Use power grid as reference when set
         log("Power grid is reference");
@@ -112,9 +134,10 @@ PowerManager::DistributionResult PowerManager::distribute(){
     }
 
     float _available_power_grid = 0.f;
-    float _available_power_sources = available_power();
+    float _available_power_sources = sumUp(power_generation);
     bool grid_ref = _power_from == PowerFrom::Grid;
     if(grid_ref){
+        grid_power_value = _power_grid;
         dist_buffer.grid = _power_grid;
         dist_buffer.available = 0;
         for(const auto& s: sinks){
@@ -205,13 +228,13 @@ PowerManager::DistributionResult PowerManager::distribute(){
     return result; // return remaining power
 }
 
-float PowerManager::available_power(){
-    float result = 0.f;
+std::unordered_map<std::string, float> PowerManager::available_power(){
+    std::unordered_map<std::string, float> result{};
 
     for(const auto& s: sources){
         if(auto source = s.lock()){
             const auto source_power = source->get_available_power();
-            result += source_power;
+            result.emplace(source->name, source_power);
         }
     }
 

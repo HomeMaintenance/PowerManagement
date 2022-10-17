@@ -97,9 +97,14 @@ public:
      * @return std::unordered_map<std::string, float>
      */
     std::unordered_map<std::string, float> get_power_distribution() const;
+    std::unordered_map<std::string, float> get_power_generation() const;
+    float get_grid_power() const;
 
     void set_power_buffer(float buffer);
     float get_power_buffer() const;
+
+
+    float power_buffer = 0;
 
     /**
      * @brief Set a function to allow the manager to get the power status to the grid
@@ -136,13 +141,15 @@ private:
      *
      * @return float
      */
-    float available_power();
+    std::unordered_map<std::string, float> available_power();
 
     // Function to calulate the power from the grid.
     // Positive if more power is drawn than generated.
     // If more power is generated set to negative value.
     std::weak_ptr<PowerGrid> power_grid;
     std::unordered_map<std::string, float> power_distribution;
+    std::unordered_map<std::string, float> power_generation;
+    float grid_power_value;
     std::vector<std::weak_ptr<PowerSource>> sources;
     std::vector<std::weak_ptr<PowerSink>> sinks;
     std::weak_ptr<BatteryManager> battery_manager;

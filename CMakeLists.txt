@@ -21,7 +21,10 @@ add_library(
     BatteryInverter.cpp
     PowerManager.h
     PowerManager.cpp
-    PowerGrid.h)
+    PowerGrid.h
+    PowerBalance.h
+    PowerBalance.cpp
+)
 target_include_directories(PowerManagement PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions(PowerManagement PRIVATE PWR_MGNT_DEBUG=1)
 
