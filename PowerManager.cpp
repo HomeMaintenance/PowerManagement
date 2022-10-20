@@ -187,8 +187,8 @@ PowerManager::DistributionResult PowerManager::distribute(){
     log("Power from Battery: " + std::to_string(battery_power));
     log("Power from Grid: " + std::to_string(grid_power_value));
 
-    // Calculate available power from sources, battery and grid
-    float power_wo_buffer = _available_power + battery_power + grid_power_value;
+    // Calculate available power from battery and grid+sinks or sources
+    const float power_wo_buffer = _available_power + battery_power;
     log("Power available: " + std::to_string(power_wo_buffer));
     float power = power_wo_buffer - power_buffer;
     result.set_power(power);
