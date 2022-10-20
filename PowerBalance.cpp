@@ -23,6 +23,7 @@ Json::Value PowerBalance::toJson() const {
         distribution[i.first] = i.second;
         distribution_total += i.second;
     }
+    result["distribution"] = distribution;
     result["distribution_total"] = distribution_total;
     result["grid"] = grid_power;
     result["power_reference"] = power_reference;
