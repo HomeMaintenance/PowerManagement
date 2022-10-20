@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <array>
 #include <memory>
 #include <unordered_map>
 #include <thread>
@@ -20,6 +21,7 @@ struct DistributeData{
     float battery_power;
     float battery_soc;
     float battery_discharge;
+    std::string power_reference;
     std::unordered_map<std::string, float> distribution;
     Json::Value toJson() const{
         Json::Value jsonData;
@@ -31,6 +33,7 @@ struct DistributeData{
         jsonData["battery_power"] = battery_power;
         jsonData["battery_soc"] = battery_soc;
         jsonData["battery_discharge"] = battery_discharge;
+        jsonData["power_reference"] = power_reference;
         Json::Value jsonDistribution;
         for(const auto& d: distribution){
             jsonDistribution[d.first] = d.second;
@@ -127,6 +130,7 @@ public:
 
     void use_power_from_sources();
     void use_power_from_grid();
+    std::string get_power_reference_str() const;
 
     void enable_log();
     void disable_log();
@@ -162,8 +166,9 @@ private:
     void log(std::string message) const;
 
     enum PowerFrom{
-        Sources,
-        Grid
+        Sources = 0,
+        Grid = 1
     };
+    const std::array<std::string, 2> _powerFrom_LUT = {"Sources", "Grid"};
     PowerFrom _power_from{PowerFrom::Sources};
 };
