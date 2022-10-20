@@ -18,6 +18,9 @@ public:
     std::unordered_map<std::string, float> getPowerDistribution() const;
     void setPowerDistribution(const std::unordered_map<std::string, float>& map);
 
+    void setPowerReference(const std::string& reference);
+    const std::string& getPowerReference() const;
+
     float getGridPower() const;
     void setGridPower(const float& value);
 
@@ -26,6 +29,7 @@ private:
     std::unordered_map<std::string, float> power_generation;
     std::unordered_map<std::string, float> power_distribution;
     float grid_power{0};
+    std::string power_reference;
     std::weak_ptr<PowerManager> powerManager;
 
     bool update_valid{false};
