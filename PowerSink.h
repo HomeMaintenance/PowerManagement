@@ -22,7 +22,7 @@ public:
      *
      * @return float
      */
-    virtual float using_power() = 0;
+    virtual float using_power() const = 0;
 
     /**
      * @brief Get the allowed power of the sink
