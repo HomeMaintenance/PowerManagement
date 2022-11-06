@@ -23,5 +23,6 @@ Json::Value BatteryInverter::toJson(){
     jsonData["present_discharge"] = present_discharge();
     jsonData["present_charge"] = present_charge();
     jsonData["online"] = online();
+    jsonData["soc"] = soc();
     return jsonData;
 }
