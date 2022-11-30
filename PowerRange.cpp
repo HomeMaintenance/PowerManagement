@@ -25,6 +25,13 @@ void PowerRange::set_max(float value){
 
 float PowerRange::get_max() const { return max; }
 
+bool PowerRange::contains(const PowerRange& other) const {
+    bool result = true;
+    result &= min <= other.min;
+    result &= max >= other.max;
+    return result;
+}
+
 void PowerRange::floor(){
     max = min;
 }

@@ -18,6 +18,7 @@ public:
     float get_min() const;
     void set_max(float value);
     float get_max() const;
+    bool contains(const PowerRange& other) const;
     std::string to_string() const;
     /**
      * @brief Set max power to min power
